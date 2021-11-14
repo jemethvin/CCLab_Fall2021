@@ -1,0 +1,28 @@
+* {
+  text-align: center;
+  background-color: rgb(27, 85, 107);
+  margin: auto;
+  color: white;
+}
+
+h1 {
+  font-size: 90px;
+  font-style: italic;
+
+}
+
+h2 {
+  font-size: 50px;
+}
+
+p {
+  font-size: 30px;
+  width: 800px;
+  margin-bottom: 50px;
+}
+
+.links {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 30px;  
+}

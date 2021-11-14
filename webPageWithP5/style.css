@@ -1,0 +1,10 @@
+body {
+  background-color: black;
+}
+
+#headline {
+  color: lightblue;
+}
+#circlePositionSlider {
+  width: 500px;
+}

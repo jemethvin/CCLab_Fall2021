@@ -1,0 +1,47 @@
+* {
+  text-align: center;
+  /* background-image: url(https://external-preview.redd.it/yZLpQ0OVk6iuG9I0YSObkXVw1CA0RlT2GHcCvqucJxY.gif?format=png8&s=f86f14611a3bb32d10dcfd3ce0d0f34d52f3cc53) */
+  background-image: url(https://qph.fs.quoracdn.net/main-qimg-8e0f9039ec0d5917a42996858a253e87-lq)
+}
+
+.songTitle {
+  /* line-height: 0.5; */
+  font-size: 60px;
+  font-weight: bold;
+  margin: auto;
+  font-family: 'Alfa Slab One', cursive;
+  color: rgb(189, 43, 43);
+  -webkit-text-stroke: 0.5px rgb(245, 205, 29);
+}
+
+.artistName {
+  font-size: 30px;
+  color: white;
+  margin-right: 110px;
+  margin-bottom: 20px;
+  font-family: 'Grechen Fuemen', cursive;
+  -webkit-text-stroke: rgb(245, 205, 29);
+}
+
+.lyricList{
+  margin: auto;
+  margin-bottom: 30px;
+  width: 300px;
+
+  color: white;
+  font-size: 20px;
+  font-family: 'Alegreya', serif;
+
+}
+
+.links{
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+#Lamour {
+  margin-right: 60px;
+}
+#Toujours {
+  margin-right: 50px;
+}

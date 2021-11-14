@@ -1,0 +1,17 @@
+p {
+    color: green;
+    font-family: "Helvetica";
+    background-color: pink;
+  }
+  img {
+    width: 100px;
+  }
+
+body{
+  background-color: pink;
+}
+
+a{
+  color: darkred;
+  /* text-decoration: none;  */
+}

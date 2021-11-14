@@ -1,0 +1,18 @@
+* {
+  text-align: center;
+  background-image: url(https://external-preview.redd.it/yZLpQ0OVk6iuG9I0YSObkXVw1CA0RlT2GHcCvqucJxY.gif?format=png8&s=f86f14611a3bb32d10dcfd3ce0d0f34d52f3cc53)
+}
+
+.pageInfo {
+  margin: auto;
+  margin-bottom: 30px;
+  width: 700px;
+  font-size: 40px;
+  color: white;
+  background: black;
+  font-family: 'Alegreya', serif;
+}
+
+.links {
+  font-size: 30px;
+}
