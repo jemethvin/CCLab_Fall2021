@@ -1,4 +1,17 @@
+*{
+  text-align: center;
+  background-color: rgb(45, 135, 109);
+}
+h1{
+  font-family: 'Dancing Script', cursive;
+  color: white;
+  font-size: 50px;
+}
+
 video{
   display: absolute;
   width:100px;
+}
+canvas{
+  margin: auto;
 }
