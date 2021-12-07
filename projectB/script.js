@@ -90,8 +90,15 @@ class Archer {
     this.coinFlip = random(0, 1);
   }
   update() {
-
-    console.log("1: ", this.numberGuesser1, "2: ", this.numberGuesser2, "3: ", this.numberGuesser3);
+    if(this.counter == this.randomStandby){
+      archerFlag1 = true;
+    }else if(this.coutner == this.randomStandby + this.randomReadying){
+      archerFlag2 = true;
+    }else if(this.counter == this.randomStandby + this.randomReadying + this.randomAnticipate){
+      archerFlag3 = true;
+    }else if(this.counter == this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold){
+      archerFlag4 = true; 
+    }
   }
 }
 
