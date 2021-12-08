@@ -80,7 +80,11 @@ function draw() {
 
   console.log("hit chance: " + archer.coinFlip);
 
-  while(vol < 0.3){
+  vol = mic.getLevel();
+
+  console.log("hit chance: " + archer.coinFlip);
+
+  if (vol < 0.3){
     archer.update();
     archer.archerImage();
 
@@ -88,6 +92,9 @@ function draw() {
     blackOut.display();
 
     music.checkMusic();
+  } else {
+    setArcherStop();  // you could set the counter to an obscenely large number or an isStopped flag in the
+                                     // Archer class
   }
 
 
