@@ -1,8 +1,6 @@
-let audioBool1 = true;
-let audioBool2 = false;
-let audioBool3 = false;
-let audioBool4 = false;
-let audioBool5 = false;
+alert("Please remember to read the rules... You will regret it otherwise!");
+
+let mic;
 
 let archerFlag1 = true;
 let archerFlag2 = false;
@@ -10,8 +8,22 @@ let archerFlag3 = false;
 let archerFlag4 = false;
 let archerFlag5 = false;
 
+let angerFlag1 = false;
+let angerFlag2 = false;
+let angerFlag3 = false;
+let angerFlag4 = false;
+let angerFlag5 = false;
+
+let audioFlag1 = true;
+let audioFlag2 = false;
+let audioFlag3 = false;
+let audioFlag4 = false;
+let audioFlag5 = false;
+let audioFlag6 = false;
+let audioFlag7 = false;
 
 let cycleFinish = false;
+let shotCount = 0;
 
 function preload() {
   archer1 = loadImage("libraries/pictures/archer1-bow.png");
@@ -35,69 +47,220 @@ function preload() {
 
   arrowRelease = loadSound("libraries/sounds/arrow-release.mp3");
   arrowBang = loadSound("libraries/sounds/arrow-bang.mp3");
+
+  archerNotice = loadSound("libraries/sounds/archer-shout.mp3")
+  archerShout = loadSound("libraries/sounds/archer-shout.mp3")
 }
 
 function setup() {
   frameRate(60);
   createCanvas(720, 720);
-  var canvas = document.getElementById("canvas");
+
+  // getAudioContext().suspend();
 
 
-  // background(0);
-  // image(backgroundHalf, 0, 0);
-  alert("Please remember to read the rules... You will regret it otherwise!");
+
+  // var canvas = document.getElementById("canvas");
+  mic = new p5.AudioIn();
+  mic.start();
+
 
   archer = new Archer();
   blackOut = new BlackOut();
   music = new Music();
+
+
 }
 
 function draw() {
+
   image(backgroundHalf, 0, 0);
 
-  blackOut.update();
-  blackOut.display();
+  vol = mic.getLevel();
 
-  archer.update();
+  console.log("hit chance: " + archer.coinFlip);
 
-  if(audioBool1){
-    music.bowMusic();
-  }else if(audioBool2){
-    music.raiseMusic();
-  }else if(audioBool3){
-    music.drawMusic();
-  }else if(audioBool4){
-    music.arrowRelease();
-  }else if(audioBool5){
-    music.arrowBang();
+  while(vol < 0.3){
+    archer.update();
+    archer.archerImage();
+
+    blackOut.update();
+    blackOut.display();
+
+    music.checkMusic();
   }
 
-  if(archer.counter == archer.randomStandby){
-    audioBool1 = true;
+
+    archer.checkReset();
+  // console.log(cycleFinish)
+
+
+  if(shotCount >= 1 && cycleFinish == false){
+    textSize(17);
+    text("Going for " + (shotCount + 1) + "...", 10, 200);
+  }else{
+    text((" "), 10, 190);
   }
+
+
+
+  // console.log(cycleFinish);
+
+
+
+}
+
+function mousePressed() {
+  userStartAudio();
 }
 
 class Archer {
   constructor() {
     this.counter = 0;
+    this.angerCounter = 0;
 
     this.randomStandby = int(random(350, 420));
     this.randomReadying = int(random(100, 200));
-    this.randomAnticipate = int(random(90, 400));
-    this.randomHold = int(random(120, 180));
-    this.finishHold = 120;
+    this.randomAnticipate = int(random(100, 200));
+    this.randomHold = int(random(120, 360));
+
+    this.isFinished = false;
+    this.isMad = false;
 
     this.coinFlip = random(0, 1);
+    // this.coinFlip = 1;
+    this.volume = 0;
   }
   update() {
-    if(this.counter == this.randomStandby){
+    if(this.isMad == true){
+      this.counter = -1;
+    }else if(this.isMad == false){
+      this.counter += 1;
+    }
+
+    if(this.counter == 0){
       archerFlag1 = true;
-    }else if(this.coutner == this.randomStandby + this.randomReadying){
+      audioFlag1 = true;
+    }else if(this.counter == this.randomStandby + this.randomReadying){
       archerFlag2 = true;
+      audioFlag2 = true;
+
     }else if(this.counter == this.randomStandby + this.randomReadying + this.randomAnticipate){
       archerFlag3 = true;
+      audioFlag3 = true;
+
     }else if(this.counter == this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold){
-      archerFlag4 = true; 
+      archerFlag4 = true;
+      audioFlag4 = true;
+
+    }else if(this.counter == this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 40 && this.coinFlip - 0.6 >= 0){
+      archerFlag5 = true;
+      audioFlag5 = true;
+    }
+    console.log("archer mad: " + this.isMad)
+    // console.log(this.counter);
+    console.log(mic.getLevel());
+  }
+  archerImage(){
+    if(archerFlag1){
+      image(archer1, 216, 337); //read 216
+      // console.log("image 1");
+    }
+    if(archerFlag2){
+      image(archer2, 173, 120);
+      // console.log("image 2");
+      archerFlag1 = false;
+    }
+    if(archerFlag3){
+      image(archer3, 130, 231);
+      // console.log("image 3");
+      archerFlag2 = false;
+    }
+    if(archerFlag4){
+      image(archer4, 34, 300);
+      // console.log("image 4");
+      archerFlag3 = false;
+    }
+    if(archerFlag5 && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
+      image(archer5, 176, 380);
+      // console.log("image 5");
+      archerFlag4 = false;
+      cycleFinish = true;
+    }else if(!archerFlag5 && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
+      cycleFinish = true;
+    }
+  }
+  checkReset(){
+    if(this.isFinished){
+      archerFlag1 = true;
+      archerFlag2 = false;
+      archerFlag3 = false;
+      archerFlag4 = false;
+      archerFlag5 = false;
+
+      audioFlag1 = true;
+      audioFlag2 = false;
+      audioFlag3 = false;
+      audioFlag4 = false;
+      audioFlag5 = false;
+      audioFlag6 = false;
+
+      cycleFinish = false;
+
+      this.counter = 0;
+
+      this.randomStandby = int(random(350, 420));
+      this.randomReadying = int(random(100, 200));
+      this.randomAnticipate = int(random(100, 200));
+      this.randomHold = int(random(120, 420));
+
+      this.coinFlip = random(0, 1);
+
+      this.isMad = false;
+
+    }
+
+    this.isFinished = false;
+
+  }
+
+  archerAnger(){
+    this.angerCounter += 1;
+    this.counter = -1;
+
+    audioFlag6 = true;
+
+    if(archerFlag1){
+      archerFlag1 = false;
+      angerFlag1 = true;
+    }else if(archerFlag2){
+      archerFlag2 = false;
+      angerFlag2 = true;
+    }else if(archerFlag3){
+      archerFlag3 = false;
+      angerFlag3 = true;
+    }else if(archerFlag4){
+      archerFlag4 = false;
+      angerFlag4 = true
+    }
+    if(angerFlag1){
+      image(archerMad1, 216, 337)
+    }
+    if(angerFlag2){
+      image(archerMad2, 173, 120);
+    }
+    if(angerFlag3){
+      image(archerMad3, 130, 231);
+    }
+    if(this.angerCounter == 100 && this.isMad == true){
+      image(angerQuiet, 0, 0);
+      audioFlag7 = true;
+
+    }
+  }
+  checkVolume(){
+    if(this.volume > 0.3){
+      this.counter = -1;
     }
   }
 }
@@ -113,39 +276,73 @@ class BlackOut {
     rect(0, 0, 720, 720);
   }
   update() {
-    if (cycleFinish == false) {
+    if(cycleFinish == false && this.alpha >= 0){
       this.alpha -= 2;
-    } else if (this.alpha <= 0) {
-      this.alpha = 0;
     }
-    if (cycleFinish == true) {
+    if(cycleFinish == true && this.alpha <= 281){
       this.alpha += 2;
-    } else if (this.alpha >= 255) {
-      this.alpha = 255;
+    }else if(this.alpha == 283){
+      archer.isFinished = true;
     }
+    // console.log(this.alpha);
   }
 }
 
+
+
 class Music {
+  checkMusic(){
+    if(audioFlag1){
+      music.bowMusic();
+    }else if(audioFlag2){
+      music.raiseMusic();
+    }else if(audioFlag3){
+      music.drawMusic();
+    }else if(audioFlag4){
+      music.arrowRelease();
+    }else if(audioFlag5){
+      music.arrowBang();
+    }else if(audioFlag6){
+      music.archerNotice();
+    }else if(audioFlag7){
+      music.archerShout();
+    }
+  }
+
   bowMusic(){
     archerBowMusic.play();
-    audioBool1 = false;
+    audioFlag1 = false;
+
+    // console.log("1")
   }
   raiseMusic(){
     archerRaiseMusic.play();
-    audioBool2 = false;
+    audioFlag2 = false;
+    // console.log("2")
   }
   drawMusic(){
     archerDrawMusic.play();
-    audioBool3 = false;
+    audioFlag3 = false;
+    // console.log("3")
   }
   arrowRelease(){
     arrowRelease.play();
-    audioBool4 = false;
+    audioFlag4 = false;
+    // console.log("4")
   }
   arrowBang(){
     arrowBang.play();
-    audioBool5 = false;
+    audioFlag5 = false;
+    shotCount += 1;
+    // console.log("5")
+  }
+  archerNotice(){
+    archerNotice.play();
+    audioFlag6 = false;
+  }
+  archerShout(){
+    archerShout.play();
+    audioFlag7 = false;
   }
 }
 
