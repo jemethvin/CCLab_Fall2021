@@ -80,10 +80,6 @@ function draw() {
 
   console.log("hit chance: " + archer.coinFlip);
 
-  vol = mic.getLevel();
-
-  console.log("hit chance: " + archer.coinFlip);
-
   if (vol < 0.3){
     archer.update();
     archer.archerImage();
@@ -108,12 +104,6 @@ function draw() {
   }else{
     text((" "), 10, 190);
   }
-
-
-
-  // console.log(cycleFinish);
-
-
 
 }
 
@@ -140,13 +130,14 @@ class Archer {
   }
   update() {
   if(this.isMad) {
-    if (this.angryCounter === 10000) {
+    if (this.angerCounter === 10000) {
       this.isMad = false;
     } else {
-      this.angryCounter++;
+      // this.angerCounter++;
       archerAnger();
     }
   } else {
+      this.counter += 1;
       if(this.counter == 0){
       archerFlag1 = true;
       audioFlag1 = true;
@@ -195,6 +186,7 @@ class Archer {
       cycleFinish = true;
     }else if(!archerFlag5 && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
       cycleFinish = true;
+      shotCount = 0;
     }
   }
   checkReset(){
@@ -232,8 +224,8 @@ class Archer {
   }
 
   archerAnger(){
-    // this.angerCounter += 1;
-    this.counter = -1;
+    this.angerCounter += 1;
+    this.counter = 10000;
 
     audioFlag6 = true;
 
@@ -265,10 +257,10 @@ class Archer {
 
     }
   }
-  checkVolume(){
-    if(this.volume > 0.3){
-      this.counter = -1;
-    }
+  setArcherStop(){
+    this.isMad = true;
+    this.angerCounter = 0;
+
   }
 }
 
