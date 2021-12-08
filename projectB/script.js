@@ -132,13 +132,15 @@ class Archer {
     this.volume = 0;
   }
   update() {
-    if(this.isMad == true){
-      this.counter = -1;
-    }else if(this.isMad == false){
-      this.counter += 1;
+  if(this.isMad) {
+    if (this.angryCounter === 10000) {
+      this.isMad = false;
+    } else {
+      this.angryCounter++;
+      archerAnger();
     }
-
-    if(this.counter == 0){
+  } else {
+      if(this.counter == 0){
       archerFlag1 = true;
       audioFlag1 = true;
     }else if(this.counter == this.randomStandby + this.randomReadying){
@@ -157,10 +159,8 @@ class Archer {
       archerFlag5 = true;
       audioFlag5 = true;
     }
-    console.log("archer mad: " + this.isMad)
-    // console.log(this.counter);
-    console.log(mic.getLevel());
   }
+}
   archerImage(){
     if(archerFlag1){
       image(archer1, 216, 337); //read 216
@@ -225,7 +225,7 @@ class Archer {
   }
 
   archerAnger(){
-    this.angerCounter += 1;
+    // this.angerCounter += 1;
     this.counter = -1;
 
     audioFlag6 = true;
@@ -345,11 +345,3 @@ class Music {
     audioFlag7 = false;
   }
 }
-
-
-// var dice = random(0, 1);
-//   if(dice - 0.5 > 0){
-//     console.log("true")
-//   }else{
-//     console.log("false")
-//   }
