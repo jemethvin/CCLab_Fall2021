@@ -48,7 +48,7 @@ function preload() {
   arrowRelease = loadSound("libraries/sounds/arrow-release.mp3");
   arrowBang = loadSound("libraries/sounds/arrow-bang.mp3");
 
-  archerNotice = loadSound("libraries/sounds/archer-shout.mp3")
+  archerNotice = loadSound("libraries/sounds/archer-notice.mp3")
   archerShout = loadSound("libraries/sounds/archer-shout.mp3")
 }
 
@@ -79,18 +79,23 @@ function draw() {
   vol = mic.getLevel();
 
   console.log("hit chance: " + archer.coinFlip);
+  // console.log(archer.angerCounter);
+  console.log(vol);
+  console.log(archer.angerCounter);
 
-  if (vol < 0.3){
+  if (vol < 0.19 || archer.isMad){
     archer.update();
-    archer.archerImage();
+    if(!archer.isMad){
+      archer.archerImage();
+    }
 
     blackOut.update();
     blackOut.display();
 
     music.checkMusic();
-  } else {
-    setArcherStop();  // you could set the counter to an obscenely large number or an isStopped flag in the
-                                     // Archer class
+  } else if(vol > 0.19 && !archerFlag5){
+    archer.setArcherStop();
+    audioFlag6 = true;
   }
 
 
@@ -133,8 +138,8 @@ class Archer {
     if (this.angerCounter === 10000) {
       this.isMad = false;
     } else {
-      // this.angerCounter++;
-      archerAnger();
+      this.angerCounter += 1;
+      this.archerAnger();
     }
   } else {
       this.counter += 1;
@@ -207,6 +212,7 @@ class Archer {
       cycleFinish = false;
 
       this.counter = 0;
+      this.angerCounter = 0;
 
       this.randomStandby = int(random(350, 420));
       this.randomReadying = int(random(100, 200));
@@ -215,7 +221,7 @@ class Archer {
 
       this.coinFlip = random(0, 1);
 
-      this.isMad = false;
+      // this.isMad = false;
 
     }
 
@@ -227,33 +233,46 @@ class Archer {
     this.angerCounter += 1;
     this.counter = 10000;
 
-    audioFlag6 = true;
-
     if(archerFlag1){
-      archerFlag1 = false;
+      // archerFlag1 = false;
       angerFlag1 = true;
     }else if(archerFlag2){
-      archerFlag2 = false;
+      // archerFlag2 = false;
       angerFlag2 = true;
     }else if(archerFlag3){
-      archerFlag3 = false;
+      // archerFlag3 = false;
       angerFlag3 = true;
     }else if(archerFlag4){
-      archerFlag4 = false;
+      // archerFlag4 = false;
       angerFlag4 = true
     }
+    archerFlag1 = false;
+    archerFlag2 = false;
+    archerFlag3 = false;
+    archerFlag4 = false;
+
     if(angerFlag1){
       image(archerMad1, 216, 337)
+      // audioFlag6 = true;
     }
     if(angerFlag2){
       image(archerMad2, 173, 120);
+      // audioFlag6 = true;
     }
     if(angerFlag3){
       image(archerMad3, 130, 231);
+      // audioFlag6 = true;
     }
-    if(this.angerCounter == 100 && this.isMad == true){
+    if(this.angerCounter >= 60){
       image(angerQuiet, 0, 0);
+    if(this.angerCounter == 60){
       audioFlag7 = true;
+    }
+    if(this.angerCounter == 240){
+      cycleFinish = true;
+    }
+
+
 
     }
   }
@@ -282,6 +301,7 @@ class BlackOut {
       this.alpha += 2;
     }else if(this.alpha == 283){
       archer.isFinished = true;
+      archer.isMad = false;
     }
     // console.log(this.alpha);
   }
@@ -338,6 +358,7 @@ class Music {
   archerNotice(){
     archerNotice.play();
     audioFlag6 = false;
+    archerBowMusic.stop();
   }
   archerShout(){
     archerShout.play();
