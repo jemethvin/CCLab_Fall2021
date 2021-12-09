@@ -94,7 +94,7 @@ function draw() {
     blackOut.display();
 
     music.checkMusic();
-  } else if(vol > 0.33 && !archerFlag5){
+  } else if(vol > 0.33 && !archerFlag5 || !archer.successCheck){
     archer.setArcherStop();
     audioFlag6 = true;
   } else if(vol > 0.33 && archerFlag5){
@@ -132,7 +132,7 @@ class Archer {
 
     this.isFinished = false;
     this.isMad = false;
-    this.successCheck = false;
+    this.successCheck = true;
 
     this.coinFlip = random(0, 1);
     // this.coinFlip = 1;
@@ -166,9 +166,9 @@ class Archer {
     }else if(this.counter == this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 40 && this.coinFlip - 0.6 >= 0){
       archerFlag5 = true;
       audioFlag5 = true;
-    }else if(!this.successCheck && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
-      this.isMad = true;
-      angerFlag5 = true;
+      this.successCheck = false;
+    }else if(this.successCheck && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130 && this.coinflip - 0.6 < 0){
+      cycleFinish = true;
     }
   }
 }
@@ -192,12 +192,15 @@ class Archer {
       // console.log("image 4");
       archerFlag3 = false;
     }
-    if(archerFlag5 && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
+    if(archerFlag5 && this.successCheck == true && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
       image(archer5, 176, 380);
-      // console.log("image 5");
       archerFlag4 = false;
       cycleFinish = true;
-    }else if(this.successCheck && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
+    }else if(archerFlag5 && !this.successCheck && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
+      angerFlag5 = true;
+
+    }else if(!archerFlag5 && this.successCheck == true && this.counter >= this.randomStandby + this.randomReadying + this.randomAnticipate + this.randomHold + 130){
+      shotCount = 0;
       cycleFinish = true;
     }
   }
@@ -233,7 +236,7 @@ class Archer {
       this.randomHold = int(random(120, 420));
 
       this.coinFlip = random(0, 1);
-      this.successCheck = false;
+      this.successCheck = true;
 
 
       // this.isMad = false;
@@ -279,9 +282,6 @@ class Archer {
       image(archerMad3, 130, 231);
       // audioFlag6 = true;
     }
-    if(this.angerCounter >= 60 && !angerFlag5){
-      image(angerQuiet, 0, 0);
-    }
     if(angerFlag5){
       image(angerSpeak, 0, 0);
       shotCount = 0;
@@ -292,12 +292,8 @@ class Archer {
     if(this.angerCounter == 200){
       cycleFinish = true;
     }
-
-
-
-
-
   }
+
   setArcherStop(){
     this.isMad = true;
     this.angerCounter = 0;
